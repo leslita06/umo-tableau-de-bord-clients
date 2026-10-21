@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>UMO Intérim · Tableau de bord par client (exemple fictif)</title>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#16161C;--gold:#F2B630;--goldbg:#FFF7E0;--grey:#6E6E7A;--line:#ECECF1;--bg:#F4F4F7;--green:#16A06B;--red:#D9443A;--cc:#F2B630}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Work Sans",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+.fictif{background:repeating-linear-gradient(135deg,#D9443A 0 18px,#C73A31 18px 36px);color:#fff;text-align:center;padding:7px 16px;font-weight:700;font-size:13px}
+.top{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+.top::after{content:"";position:absolute;right:-60px;top:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(242,182,48,.35),transparent 65%)}
+.top .in{max-width:1300px;margin:0 auto;padding:20px 28px;display:flex;align-items:center;gap:22px;position:relative;z-index:1}
+.logo{background:#fff;border-radius:14px;padding:8px 10px;display:flex}.logo img{height:60px}
+.org{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+h1{margin:0;font-size:28px;font-weight:800}
+.top p{margin:4px 0 0;color:#C9C9D2;font-size:14px}
+.top .act{margin-left:auto;display:flex;gap:10px}
+.btn{font:inherit;font-size:13.5px;font-weight:700;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;display:flex;gap:7px;align-items:center;background:var(--gold);color:var(--ink)}
+.btn svg{width:16px;height:16px}
+.tabs{max-width:1300px;margin:0 auto;padding:18px 28px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.tab{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;position:relative;overflow:hidden;transition:.15s}
+.tab:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.tab::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c)}
+.tab.on{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 18%,transparent)}
+.tab .tn{font-weight:800;font-size:15.5px;padding-left:6px}
+.tab .s{font-size:12px;color:var(--grey);padding-left:6px;margin-top:2px}
+.tab .v{font-size:22px;font-weight:800;padding-left:6px;margin-top:6px}.tab .v small{font-size:12px;color:var(--grey);font-weight:600}
+.flags{padding-left:6px;margin-top:4px;display:flex;gap:4px;flex-wrap:wrap}
+.flag{font-size:10.5px;font-weight:700;background:#EDEDF2;border-radius:5px;padding:1px 6px;color:#444}
+.filters{position:sticky;top:0;z-index:5;background:rgba(244,244,247,.95);backdrop-filter:blur(6px)}
+.filters .in{max-width:1300px;margin:0 auto;padding:12px 28px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;border-bottom:1px solid var(--line)}
+.f{display:flex;flex-direction:column;gap:4px}
+.f label{font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.08em}
+select{font:inherit;font-size:14px;font-weight:600;padding:8px 30px 8px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2316161C' stroke-width='3'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;appearance:none;min-width:150px;cursor:pointer}
+.scope{margin-left:auto;font-size:13px;color:var(--grey);align-self:center}.scope b{color:var(--ink)}
+main{max-width:1300px;margin:0 auto;padding:18px 28px 30px}
+.fiche{background:#fff;border:1px solid var(--line);border-left:8px solid var(--cc);border-radius:16px;padding:16px 20px;display:flex;gap:28px;flex-wrap:wrap;align-items:center}
+.fiche h2{margin:0;font-size:22px;font-weight:800}
+.fiche .sect{color:var(--grey);font-size:13.5px}
+.fiche .blk{font-size:12px;color:var(--grey);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.fiche .blk div{font-size:14px;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:600;margin-top:4px;display:flex;gap:6px;flex-wrap:wrap}
+.pole{background:var(--goldbg);color:#8A6309;border-radius:999px;padding:3px 10px;font-size:12.5px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kpi .lab{font-size:12.5px;color:var(--grey);font-weight:600}
+.kpi .val{font-size:24px;font-weight:800;margin:3px 0;white-space:nowrap}.kpi .val small{font-size:13px;color:var(--grey);font-weight:600}
+.kpi .cmp{font-size:12px;color:var(--grey)}.kpi .pill{white-space:nowrap}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px}
+.ok{background:#E3F6EE;color:var(--green)}.ko{background:#FDECEA;color:var(--red)}.eq{background:#EDEDF2;color:var(--grey)}
+.alerts{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.alert{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:9px 14px;font-size:13.5px}
+.alert.red{border-left-color:var(--red)}.alert.green{border-left-color:var(--green)}
+h3.sec{font-size:18px;font-weight:800;margin:26px 0 12px;display:flex;gap:10px;align-items:center}
+h3.sec:before{content:"";width:6px;height:22px;background:var(--gold);border-radius:3px}
+h3.sec span{font-size:13px;font-weight:500;color:var(--grey)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.grid3{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.panel h4{margin:0;font-size:15px}.panel .q{font-size:12.5px;color:var(--grey);margin:2px 0 8px}
+svg text{font-family:"Work Sans",Arial,sans-serif;font-size:11px;fill:#777}
+.bars div.row{display:grid;grid-template-columns:140px 1fr 90px;gap:10px;align-items:center;padding:6px 0;font-size:13.5px;cursor:pointer}
+.bars div.row:hover{background:var(--goldbg)}
+.track{background:#F1F1F5;border-radius:6px;height:16px;position:relative;overflow:hidden}
+.fill{height:100%;border-radius:6px}
+.bars b{text-align:right}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--grey);text-align:left;padding:9px 8px;border-bottom:2px solid var(--ink);cursor:pointer;white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.n{text-align:right}
+tbody tr:hover{background:var(--goldbg)}
+tfoot td{font-weight:800;background:#FAFAFC}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:#fff;font-size:12.5px;padding:7px 10px;border-radius:8px;opacity:0;z-index:20;white-space:nowrap}
+footer{max-width:1300px;margin:0 auto;padding:0 28px 40px;color:var(--grey);font-size:12.5px}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:13px;flex:1}
+.legend div{display:flex;gap:8px;align-items:center;border-bottom:1px dashed var(--line);padding-bottom:4px}.legend i{width:11px;height:11px;border-radius:3px}.legend b{margin-left:auto}
+@media(max-width:1100px){.tabs{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){.tabs{grid-template-columns:1fr 1fr}.kpis,.grid,.grid3{grid-template-columns:1fr}.filters{position:static}.top .act{display:none}}
+@media print{.filters,.top .act,.tabs,.fictif{display:none}body{background:#fff}.panel,.kpi,.fiche{break-inside:avoid}main{padding:0 10px}}
+</style>
+</head>
+<body>
+<div class="fictif">⚠ EXEMPLE FICTIF · chiffres inventés pour démonstration, aucune donnée réelle d'UMO Intérim ni de ses clients</div>
+<div class="top"><div class="in">
+<div class="logo"><img src="logo.png" alt="UMO"></div>
+<div><div class="org">UMO Intérim · Afrique de l'Ouest · Pilotage des comptes clients</div>
+<h1>Tableau de bord par client</h1>
+<p>Intérimaires en mission, engagements de service, absences, sécurité, paie et facturation, de janvier à septembre 2026.</p></div>
+<div class="act"><button class="btn" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Rapport client en PDF</button></div>
+</div></div>
+<div class="tabs" id="tabs"></div>
+<div class="filters"><div class="in">
+<div class="f"><label>Mois</label><select id="fMois"></select></div>
+<div class="f"><label>Pays</label><select id="fPays"></select></div>
+<div class="f"><label>Métier</label><select id="fMet"></select></div>
+<div class="scope" id="scope"></div>
+</div></div>
+<main>
+<div class="fiche" id="fiche"></div>
+<div class="kpis" id="kpis"></div>
+<div class="alerts" id="alerts"></div>
+<h3 class="sec">Tendances depuis janvier <span id="tsc"></span></h3>
+<div class="grid">
+<div class="panel"><h4>Intérimaires en mission</h4><p class="q">Le volume suit-il l'activité du client ?</p><div id="g1"></div></div>
+<div class="panel"><h4>Taux de service</h4><p class="q">Part des postes commandés pourvus dans le délai. La ligne rouge est l'engagement contractuel.</p><div id="g2"></div></div>
+<div class="panel"><h4>Chiffre d'affaires facturé (millions F CFA)</h4><p class="q">Ce que le compte rapporte chaque mois.</p><div id="g3"></div></div>
+<div class="panel"><h4>Taux d'absentéisme</h4><p class="q">Repère interne : 2 %.</p><div id="g4"></div></div>
+</div>
+<h3 class="sec">Le mois en détail <span id="dsc"></span></h3>
+<div class="grid3">
+<div class="panel"><h4>Par pays</h4><p class="q">Intérimaires en mission. Cliquez un pays pour filtrer.</p><div class="bars" id="bp"></div></div>
+<div class="panel"><h4>Par métier</h4><p class="q">Répartition des intérimaires en mission.</p><div id="dm"></div></div>
+</div>
+<h3 class="sec">Détail par pays et par métier <span>cliquez un en-tête pour trier</span></h3>
+<div class="panel" style="overflow-x:auto"><table id="tab"></table></div>
+</main>
+<footer>Sources prévues dans l'outil réel : commandes et contrats de mission, relevés d'heures validés par le client, livre de paie, factures. Taux de service = postes pourvus dans le délai ÷ postes commandés. Absentéisme calculé sur 21 jours ouvrés. Les engagements de service affichés sont des hypothèses de démonstration.</footer>
+<div class="tip" id="tip"></div>
+<script>
+function makeD(){let a=22;const rnd=()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const r=(x,y)=>x+(y-x)*rnd(),R=Math.round,N=9;
+const M=["Janv.","Févr.","Mars","Avr.","Mai","Juin","Juil.","Août","Sept."];
+const PAYS={CI:"Côte d'Ivoire",SN:"Sénégal",BF:"Burkina Faso",ML:"Mali",BJ:"Bénin",TG:"Togo"};
+const C=[
+{id:"coca",nom:"Coca-Cola",sect:"Boissons · embouteillage et distribution",col:"#E4002B",pays:{CI:150,SN:95,BF:55,ML:50,BJ:40,TG:35},
+metiers:[["Opérateurs de production",.38,165],["Chauffeurs-livreurs",.22,190],["Merchandisers",.25,140],["Caristes et magasiniers",.15,170]],
+poles:["Mise à disposition","Recrutement","Paie externalisée","Formation"],sla:{service:95,delai:5},expat:0,trend:1.012},
+{id:"pg",nom:"Procter & Gamble",sect:"Biens de grande consommation",col:"#003DA5",pays:{CI:60,SN:42,BF:18,ML:16,BJ:14,TG:12},
+metiers:[["Merchandisers",.45,145],["Promoteurs des ventes",.30,150],["Superviseurs terrain",.10,290],["Assistants commerciaux",.15,210]],
+poles:["Mise à disposition","Recrutement","Formation"],sla:{service:95,delai:7},expat:0,trend:1.006},
+{id:"bat",nom:"British American Tobacco",sect:"Tabac · force de vente",col:"#0E2B63",pays:{CI:85},
+metiers:[["Représentants commerciaux",.55,230],["Merchandisers",.25,145],["Chauffeurs-livreurs",.12,190],["Agents administratifs",.08,220]],
+poles:["Mise à disposition","Paie externalisée","Gestion des expatriés"],sla:{service:95,delai:6},expat:3,trend:1.0},
+{id:"wave",nom:"Wave",sect:"Mobile money · réseau d'agents et service client",col:"#1DC8F2",pays:{CI:270,BF:95},
+metiers:[["Conseillers service client",.40,175],["Agents de terrain",.35,150],["Superviseurs de zone",.10,320],["Chargés de conformité",.15,260]],
+poles:["Recrutement","Mise à disposition","Paie externalisée","Formation"],sla:{service:92,delai:4},expat:0,trend:1.025}];
+const segs=[];
+for(const c of C)for(const [p,base] of Object.entries(c.pays)){const start=base/Math.pow(c.trend,8);
+for(const [mt,part,sal] of c.metiers){const s={client:c.id,pays:p,metier:mt};["hc","cmd","pourv","delai","absd","at","h","fact","masse","bul","renouv","form"].forEach(k=>s[k]=[]);
+for(let m=0;m<N;m++){const season=1+((c.id==="coca"&&m>=2&&m<=4)?.06:0)+((c.id==="wave"&&m>=6)?.05:0);
+const hc=Math.max(1,R(start*Math.pow(c.trend,m)*part*season*r(.97,1.03)));const cmd=Math.max(1,R(hc*r(.10,.18)));
+let tx=c.id!=="wave"?r(.94,.995):r(.88,.97);if(c.id==="pg"&&(p==="ML"||p==="BF")&&m>=7)tx=r(.55,.7);if(c.id==="wave"&&p==="BF"&&m===8)tx=.8;
+const lourd=/^(Chauff|Opér|Caris)/.test(mt),cadre=/^(Superv|Chargés)/.test(mt);
+s.hc.push(hc);s.cmd.push(cmd);let pv=0;for(let k=0;k<cmd;k++)if(rnd()<tx)pv++;if(c.id==="pg"&&(p==="ML"||p==="BF")&&m>=7)pv=(mt==="Merchandisers"||mt==="Promoteurs des ventes")?Math.max(0,cmd-1):cmd;s.pourv.push(pv);
+s.delai.push(R((r(2.5,6.5)+((p==="ML"||p==="BF")?1.5:0)+(cadre?2:0))*10)/10);
+s.absd.push(R(hc*21*r(.010,.024)));s.at.push(rnd()<(lourd?hc/900:hc/3000)?1:0);s.h.push(R(hc*173.33*r(.97,1.02)));
+const masse=R(hc*sal*1000*r(.98,1.03));s.masse.push(masse);s.fact.push(R(masse*(c.poles.includes("Mise à disposition")?1.62:1.55)));
+s.bul.push(c.poles.includes("Paie externalisée")?hc:0);s.renouv.push(R(hc*r(.05,.10)));
+s.form.push(c.poles.includes("Formation")?R(hc*r(.8,2.4)):R(hc*r(.2,.5)))}
+segs.push(s)}}
+return{mois:M,jours:21,pays:PAYS,clients:C.map(c=>({id:c.id,nom:c.nom,sect:c.sect,col:c.col,poles:c.poles,sla:c.sla,expat:c.expat,pays:Object.keys(c.pays)})),segs}}
+const D=makeD();
+const N=D.mois.length,$=id=>document.getElementById(id);
+const fr=(n,d=0)=>Number(n).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const S={client:'all',mois:N-1,pays:'all',met:'all',sort:['hc',-1]};
+const CL=Object.fromEntries(D.clients.map(c=>[c.id,c]));
+const COL=c=>c==='all'?'#F2B630':CL[c].col;
+D.mois.forEach((m,i)=>$('fMois').add(new Option(m+' 2026',i)));$('fMois').value=N-1;
+function fill(id,lab,vals,cur){const s=$(id);s.innerHTML='';s.add(new Option(lab,'all'));vals.forEach(v=>s.add(new Option(v[1],v[0])));s.value=vals.some(v=>v[0]===cur)?cur:'all';return s.value}
+const base=()=>D.segs.filter(s=>S.client==='all'||s.client===S.client);
+const sel=()=>base().filter(s=>(S.pays==='all'||s.pays===S.pays)&&(S.met==='all'||s.metier===S.met));
+function agg(m,segs){segs=segs||sel();const t={hc:0,cmd:0,pourv:0,dsum:0,absd:0,at:0,h:0,fact:0,masse:0,bul:0,renouv:0,form:0};
+segs.forEach(s=>{t.hc+=s.hc[m];t.cmd+=s.cmd[m];t.pourv+=s.pourv[m];t.dsum+=s.delai[m]*s.cmd[m];t.absd+=s.absd[m];t.at+=s.at[m];t.h+=s.h[m];t.fact+=s.fact[m];t.masse+=s.masse[m];t.bul+=s.bul[m];t.renouv+=s.renouv[m];t.form+=s.form[m]});
+t.serv=t.cmd?t.pourv/t.cmd*100:100;t.delai=t.cmd?t.dsum/t.cmd:0;t.abs=t.hc?t.absd/(t.hc*D.jours)*100:0;t.tf=t.h?t.at/t.h*1e6:0;return t}
+function sla(){if(S.client!=='all')return CL[S.client].sla;return{service:94,delai:6,moy:1}}
+function tabs(){const m=S.mois;const all={id:'all',nom:'Tous les clients',sect:'Portefeuille complet',col:'#16161C',pays:[...new Set(D.segs.map(s=>s.pays))]};
+$('tabs').innerHTML=[all,...D.clients].map(c=>{const t=agg(m,D.segs.filter(s=>c.id==='all'||s.client===c.id));
+return `<div class="tab ${S.client===c.id?'on':''}" style="--c:${c.col}" data-id="${c.id}"><div class="tn">${c.nom}</div><div class="s">${c.sect}</div><div class="v">${fr(t.hc)} <small>intérimaires</small></div><div class="flags">${c.pays.map(p=>`<span class="flag">${p}</span>`).join('')}</div></div>`}).join('');
+document.querySelectorAll('.tab').forEach(e=>e.onclick=()=>{S.client=e.dataset.id;S.pays='all';S.met='all';render()})}
+function fiche(){const c=S.client==='all'?null:CL[S.client];document.documentElement.style.setProperty('--cc',COL(S.client));
+const pays=c?c.pays:[...new Set(D.segs.map(s=>s.pays))];const poles=c?c.poles:['Recrutement','Mise à disposition','Paie externalisée','Gestion des expatriés','Formation'];const s=sla();
+$('fiche').innerHTML=`<div><h2>${c?c.nom:'Portefeuille des 4 clients'}</h2><div class="sect">${c?c.sect:'Coca-Cola, Procter & Gamble, British American Tobacco, Wave'}</div></div>
+<div class="blk">Pays couverts<div>${pays.map(p=>`<span class="flag">${D.pays[p]}</span>`).join('')}</div></div>
+<div class="blk">Pôles UMO mobilisés<div>${poles.map(p=>`<span class="pole">${p}</span>`).join('')}</div></div>
+<div class="blk">Engagements de service<div>${c?`Taux de service ≥ ${s.service} % · Délai ≤ ${s.delai} jours`:'Fixés client par client : taux de service de 92 à 95 %, délai de 4 à 7 jours'}</div></div>
+${c&&c.expat?`<div class="blk">Expatriés suivis<div>${c.expat} dossiers</div></div>`:''}`}
+function cmp(a,b,good,unit,d=1){if(b==null)return '';const x=unit==='pt'?a-b:(b?(a-b)/b*100:0);if(Math.abs(x)<.05)return '<span class="pill eq">= stable</span>';
+const cls=good===null?'eq':((x>0)===good?'ok':'ko');return `<span class="pill ${cls}">${x>0?'▲':'▼'} ${fr(Math.abs(x),d)} ${unit==='pt'?'pt':'%'}</span>`}
+function kpis(){const m=S.mois,t=agg(m),p=m?agg(m-1):null,s=sla();
+const K=[['Intérimaires en mission',fr(t.hc),cmp(t.hc,p&&p.hc,null,'%')],
+['Taux de service',fr(t.serv,1)+' <small>%</small>',`<span class="pill ${t.serv>=s.service?'ok':'ko'}">${t.serv>=s.service?'conforme':'sous l\'engagement'} (${s.moy?'repère ':''}${s.service} %)</span>`],
+['Délai moyen de pourvoi',fr(t.delai,1)+' <small>jours</small>',`<span class="pill ${t.delai<=s.delai?'ok':'ko'}">${t.delai<=s.delai?'conforme':'hors délai'} (≤ ${s.delai} j)</span>`],
+['Postes commandés / pourvus',fr(t.cmd)+' <small>/ '+fr(t.pourv)+'</small>',cmp(t.cmd,p&&p.cmd,null,'%')],
+['Taux d\'absentéisme',fr(t.abs,1)+' <small>%</small>',cmp(t.abs,p&&p.abs,false,'pt')],
+['Accidents du travail',fr(t.at),`<span class="pill eq">taux de fréquence ${fr(t.tf,1)}</span>`],
+['Heures prestées',fr(t.h),cmp(t.h,p&&p.h,null,'%')],
+['Chiffre d\'affaires facturé',fr(t.fact/1e6,1)+' <small>M F CFA</small>',cmp(t.fact,p&&p.fact,true,'%')],
+['Bulletins de paie traités',fr(t.bul),t.bul?'<span class="pill eq">paie externalisée</span>':'<span class="pill eq">non souscrit</span>'],
+['Heures de formation',fr(t.form),cmp(t.form,p&&p.form,true,'%')]];
+$('kpis').innerHTML=K.map(k=>`<div class="kpi"><div class="lab">${k[0]}</div><div class="val">${k[1]}</div><div class="cmp">${k[2]} ${k[2].includes('▲')||k[2].includes('▼')?'vs mois préc.':''}</div></div>`).join('');
+const A=[];const combos=[...new Set(sel().map(x=>x.client+'|'+x.pays))];
+combos.forEach(k=>{const [cl,pp]=k.split('|'),e=CL[cl].sla,a=agg(m,sel().filter(x=>x.client===cl&&x.pays===pp)),who=(S.client==='all'?CL[cl].nom+' · ':'')+D.pays[pp];
+if(a.serv<e.service)A.push(['red',`${who} : taux de service à ${fr(a.serv,1)} %, sous l'engagement de ${e.service} %. ${fr(a.cmd-a.pourv)} poste(s) non pourvu(s) à relancer.`,a.serv]);
+else if(a.delai>e.delai)A.push(['',`${who} : délai moyen de ${fr(a.delai,1)} jours, au-delà des ${e.delai} jours prévus.`,200])});
+A.sort((x,y)=>x[2]-y[2]);
+if(t.at)A.push(['red',`${fr(t.at)} accident(s) du travail ce mois : déclaration et analyse à suivre avec le client.`]);
+if(t.renouv)A.push(['',`${fr(t.renouv)} contrats de mission arrivent à échéance le mois prochain : à renouveler ou à remplacer.`]);
+if(!A.some(a=>a[0]==='red'))A.unshift(['green','Tous les engagements de service sont tenus ce mois.']);
+$('alerts').innerHTML=A.slice(0,6).map(a=>`<div class="alert ${a[0]}">${a[1]}</div>`).join('')}
+const tip=$('tip');const tp=(e,h)=>{tip.innerHTML=h;tip.style.opacity=1;tip.style.left=e.clientX+12+'px';tip.style.top=e.clientY-34+'px'},th=()=>tip.style.opacity=0;
+function nice(v){v*=1.1;const raw=v/4,p=Math.pow(10,Math.floor(Math.log10(raw)));return [1,2,2.5,5,10].map(x=>x*p).find(x=>x>=raw)*4}
+function chart(id,v,o){const W=560,H=210,L=50,B=24,T=12,w=W-L-12,h=H-B-T,st=w/N,c=COL(S.client);const mn=o.min||0,mx=o.max||nice(Math.max(...v));const Y=x=>T+h-h*(x-mn)/(mx-mn);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;for(let k=0;k<=4;k++){const val=mn+(mx-mn)*k/4;s+=`<line x1="${L}" x2="${W-12}" y1="${Y(val)}" y2="${Y(val)}" stroke="#EEE"/><text x="${L-8}" y="${Y(val)+4}" text-anchor="end">${o.f(val)}</text>`}
+s+=`<rect x="${L+S.mois*st}" y="${T}" width="${st}" height="${h}" fill="#FFF7E0"/>`;
+if(o.ref!=null){s+=`<line x1="${L}" x2="${W-12}" y1="${Y(o.ref)}" y2="${Y(o.ref)}" stroke="#D9443A" stroke-dasharray="5 4"/><text x="${W-14}" y="${Y(o.ref)-5}" text-anchor="end" style="fill:#D9443A;font-weight:600">${o.rl}</text>`}
+if(o.bar)v.forEach((x,i)=>{s+=`<rect class="hv" data-t="${D.mois[i]} : ${o.f(x,1)}" x="${L+i*st+st*.2}" y="${Y(x)}" width="${st*.6}" height="${T+h-Y(x)}" rx="4" fill="${c}" opacity="${i===S.mois?1:.6}"/>`});
+else{const P=v.map((x,i)=>[L+i*st+st/2,Y(x)]);s+=`<polyline points="${P.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${c}" stroke-width="3"/>`;P.forEach((p,i)=>s+=`<circle class="hv" data-t="${D.mois[i]} : ${o.f(v[i],1)}" cx="${p[0]}" cy="${p[1]}" r="${i===S.mois?6:4}" fill="${i===S.mois?c:'#fff'}" stroke="${c}" stroke-width="2.5"/>`)}
+D.mois.forEach((m,i)=>s+=`<text x="${L+i*st+st/2}" y="${H-7}" text-anchor="middle" style="${i===S.mois?'font-weight:700;fill:#16161C':''}">${m}</text>`);
+$(id).innerHTML=s+'</svg>';$(id).querySelectorAll('.hv').forEach(e=>{e.onmousemove=ev=>tp(ev,e.dataset.t);e.onmouseleave=th})}
+function charts(){const A=[...Array(N).keys()].map(m=>agg(m)),s=sla();
+chart('g1',A.map(a=>a.hc),{f:x=>fr(x),bar:1});
+const lo=Math.min(80,Math.floor(Math.min(...A.map(a=>a.serv))/5)*5);
+chart('g2',A.map(a=>a.serv),{f:(x,d)=>fr(x,d?1:0)+' %',min:lo,max:100,ref:s.service,rl:'engagement '+s.service+' %'});
+chart('g3',A.map(a=>a.fact/1e6),{f:(x,d)=>fr(x,d?1:0),bar:1});
+chart('g4',A.map(a=>a.abs),{f:(x,d)=>fr(x,1)+' %',max:4,ref:2,rl:'repère 2 %'})}
+function detail(){const m=S.mois;const segs=base().filter(s=>S.met==='all'||s.metier===S.met);const pays=[...new Set(segs.map(s=>s.pays))];
+const rows=pays.map(p=>[p,agg(m,segs.filter(s=>s.pays===p))]).sort((a,b)=>b[1].hc-a[1].hc);const mx=Math.max(...rows.map(r=>r[1].hc));
+$('bp').innerHTML=rows.map(([p,a])=>`<div class="row" data-p="${p}" style="${S.pays!=='all'&&S.pays!==p?'opacity:.4':''}"><span>${D.pays[p]}</span><div class="track"><div class="fill" style="width:${a.hc/mx*100}%;background:${COL(S.client)}"></div></div><b>${fr(a.hc)} · ${fr(a.serv,0)} %</b></div>`).join('')+'<div class="q" style="margin-top:6px">Chiffre de droite : intérimaires · taux de service.</div>';
+document.querySelectorAll('#bp .row').forEach(e=>e.onclick=()=>{S.pays=S.pays===e.dataset.p?'all':e.dataset.p;render()});
+const ms={};sel().forEach(s=>ms[s.metier]=(ms[s.metier]||0)+s.hc[m]);const E=Object.entries(ms).sort((a,b)=>b[1]-a[1]);const tot=E.reduce((a,b)=>a+b[1],0);
+const pal=['#16161C','#F2B630','#D9443A','#16A06B','#3D6BD9','#9A6BD9','#B8B8C4','#E88B3A','#2FB5B0','#7A7A86'];
+let a0=-Math.PI/2,sv='<svg viewBox="0 0 150 150" width="150" height="150">';E.forEach(([k,v],i)=>{const a1=a0+v/tot*2*Math.PI-(v===tot?1e-4:0),L=a1-a0>Math.PI?1:0,P=(r,a)=>[75+r*Math.cos(a),75+r*Math.sin(a)];
+const [x1,y1]=P(62,a0),[x2,y2]=P(62,a1),[x3,y3]=P(40,a1),[x4,y4]=P(40,a0);sv+=`<path class="hv" data-t="${k} : ${fr(v)}" d="M${x1},${y1}A62,62 0 ${L} 1 ${x2},${y2}L${x3},${y3}A40,40 0 ${L} 0 ${x4},${y4}Z" fill="${pal[i%10]}"/>`;a0=a1});
+sv+=`<text x="75" y="74" text-anchor="middle" style="font-size:22px;font-weight:800;fill:#16161C">${fr(tot)}</text><text x="75" y="92" text-anchor="middle">intérimaires</text></svg>`;
+$('dm').innerHTML=`<div style="display:flex;gap:16px;align-items:center">${sv}<div class="legend">${E.map(([k,v],i)=>`<div><i style="background:${pal[i%10]}"></i>${k}<b>${fr(v)}</b></div>`).join('')}</div></div>`;
+$('dm').querySelectorAll('.hv').forEach(e=>{e.onmousemove=ev=>tp(ev,e.dataset.t);e.onmouseleave=th})}
+const COLS=[['cl','Client',0],['py','Pays',0],['mt','Métier',0],['hc','Intérimaires',1],['cmd','Commandés',1],['serv','Taux de service',1],['delai','Délai (j)',1],['abs','Absentéisme',1],['at','AT',1],['fact','Facturé (F CFA)',1]];
+function table(){const m=S.mois;const rows=sel().map(s=>({cl:CL[s.client].nom,c:s.client,py:D.pays[s.pays],mt:s.metier,...agg(m,[s])}));const [k,d]=S.sort;
+rows.sort((a,b)=>typeof a[k]==='string'?a[k].localeCompare(b[k])*d:(a[k]-b[k])*d);const t=agg(m),s=sla();
+const f=(r,c)=>c==='cl'?`<span class="dot" style="background:${CL[r.c].col}"></span>${r.cl}`:c==='serv'?`<span class="pill ${r.serv>=CL[r.c].sla.service?'ok':'ko'}">${fr(r.serv,1)} %</span>`:c==='abs'?fr(r.abs,1)+' %':c==='delai'?fr(r.delai,1):c==='fact'?fr(Math.round(r.fact)):typeof r[c]==='string'?r[c]:fr(r[c]);
+$('tab').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="${c[2]?'n':''}" data-k="${c[0]}">${c[1]}${S.sort[0]===c[0]?(S.sort[1]>0?' ▲':' ▼'):''}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${COLS.map(c=>`<td class="${c[2]?'n':''}">${f(r,c[0])}</td>`).join('')}</tr>`).join('')}</tbody>
+<tfoot><tr><td>Total</td><td></td><td></td><td class="n">${fr(t.hc)}</td><td class="n">${fr(t.cmd)}</td><td class="n">${fr(t.serv,1)} %</td><td class="n">${fr(t.delai,1)}</td><td class="n">${fr(t.abs,1)} %</td><td class="n">${fr(t.at)}</td><td class="n">${fr(Math.round(t.fact))}</td></tr></tfoot>`;
+$('tab').querySelectorAll('th').forEach(h=>h.onclick=()=>{const k=h.dataset.k;S.sort=[k,S.sort[0]===k?-S.sort[1]:(['cl','py','mt'].includes(k)?1:-1)];table()})}
+function render(){S.pays=fill('fPays','Tous les pays',[...new Set(base().map(s=>s.pays))].map(p=>[p,D.pays[p]]),S.pays);
+S.met=fill('fMet','Tous les métiers',[...new Set(base().filter(s=>S.pays==='all'||s.pays===S.pays).map(s=>s.metier))].map(x=>[x,x]),S.met);
+const nm=S.client==='all'?'tous les clients':CL[S.client].nom;const sc=[nm,S.pays==='all'?'tous pays':D.pays[S.pays],S.met==='all'?'':S.met].filter(Boolean).join(' · ');
+$('scope').innerHTML=`Vue : <b>${sc}</b> · <b>${D.mois[S.mois]} 2026</b>`;$('tsc').textContent='· '+sc;$('dsc').textContent='· '+D.mois[S.mois]+' 2026 · '+sc;
+tabs();fiche();kpis();charts();detail();table()}
+$('fMois').onchange=e=>{S.mois=+e.target.value;render()};$('fPays').onchange=e=>{S.pays=e.target.value;S.met='all';render()};$('fMet').onchange=e=>{S.met=e.target.value;render()};
+const q=new URLSearchParams(location.search).get('client');if(q&&CL[q])S.client=q;
+render();
+</script>
+</body>
+</html>
